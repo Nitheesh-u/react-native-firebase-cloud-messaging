@@ -2,6 +2,7 @@ package com.firebasePushNotification;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.facebook.react.bridge.Callback;
@@ -11,6 +12,8 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import javax.annotation.Nonnull;
@@ -62,6 +65,25 @@ public class FirebasePushNotification extends ReactContextBaseJavaModule {
                     }
                 });
     }
+  @ReactMethod
+     public void getFCMToken(final Callback callback) {
+         FirebaseInstanceId.getInstance().getInstanceId()
+         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+             @Override
+             public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                 if (!task.isSuccessful()) {
+                     callback.invoke(null,task.getException());
+                     return;
+                 }
+
+                 // Get new Instance ID token
+                 String token = task.getResult().getToken();
+                 callback.invoke(null,token);
+
+             }
+         });
+       
+     }
 
     @ReactMethod
     public void checkPermissionForPushNotification(Callback callback) {

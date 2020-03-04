@@ -69,6 +69,7 @@ RCT_EXPORT_METHOD(registerRemoteNotification:(RCTPromiseResolveBlock)resolve rej
     
 }
 
+
 RCT_EXPORT_METHOD(subscribeToTopic:(NSString*) topic
                   resolve:(RCTPromiseResolveBlock) resolve
                   reject:(RCTPromiseRejectBlock) reject){
@@ -92,6 +93,16 @@ RCT_EXPORT_METHOD(unsubscribeFromTopic: (NSString*) topic
             reject(@"messaging/unsubscribe_error", @"Failed to unsubscribe To Topic", error);
         }
     }];
+}
+
+RCT_EXPORT_METHOD(getFCMToken:(RCTResponseSenderBlock)callback) {
+        [[FIRInstanceID instanceID] instanceIDWithHandler:^(FIRInstanceIDResult * _Nullable result,NSError * _Nullable error) {
+            if (error != nil) {
+                callback(@[[NSNull null],error]);
+            } else {
+                callback(@[[NSNull null],result.token]);
+            }
+        }];
 }
 
 RCT_EXPORT_METHOD(checkPermissionForPushNotification:(RCTResponseSenderBlock)callback) {

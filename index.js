@@ -20,6 +20,9 @@ export default {
         callback(event);
 			});
   },
+  getFCMTokenForPushNotification(callback) {
+    return FirebasePushNotification.getFCMToken(callback); 
+  },
   checkPermissionForPushNotification(callback) {
     return FirebasePushNotification.checkPermissionForPushNotification(callback);
   }
